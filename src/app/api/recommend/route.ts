@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import chroma from "chroma-js";
+import sharp from "sharp";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -58,13 +59,13 @@ export async function GET(request: Request) {
         if (!imgRes.ok) return null;
         
         const arrayBuffer = await imgRes.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
+        const buffer = await sharp(Buffer.from(arrayBuffer)).jpeg().toBuffer();
         
         const tempDir = os.tmpdir();
         const tempFilePath = path.join(tempDir, `rec-${Date.now()}-${Math.floor(Math.random()*10000)}.jpg`);
         fs.writeFileSync(tempFilePath, buffer);
         
-        const color = await getColor(tempFilePath);
+        const color = (await getColor(tempFilePath)) as any;
         fs.unlinkSync(tempFilePath);
         
         if (!color) return null;

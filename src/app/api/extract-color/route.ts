@@ -3,6 +3,7 @@ import { getColor } from "colorthief";
 import fs from "fs";
 import path from "path";
 import os from "os";
+import sharp from "sharp";
 
 export async function POST(request: Request) {
   try {
@@ -17,17 +18,17 @@ export async function POST(request: Request) {
     }
 
     const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // Convert to strictly JPEG format using sharp to avoid WebP/PNG parsing errors in ColorThief
+    const buffer = await sharp(Buffer.from(arrayBuffer)).jpeg().toBuffer();
 
     // Create a temporary file
     const tempDir = os.tmpdir();
-    // Getting extension is tricky from URL, assume jpg as it's the most robust for pure pixel reading
     const tempFilePath = path.join(tempDir, `img-${Date.now()}-${Math.floor(Math.random() * 1000)}.jpg`);
     fs.writeFileSync(tempFilePath, buffer);
 
     // Extract dominant color. 
     // color is returning [r, g, b] array.
-    const color = await getColor(tempFilePath);
+    const color = (await getColor(tempFilePath)) as any;
 
     // Cleanup
     fs.unlinkSync(tempFilePath);

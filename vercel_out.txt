@@ -1,0 +1,46 @@
+Retrieving project…
+Deploying jieun/260424-vibe
+Uploading [--------------------] (0.0B/50B)
+Uploading [====================] (50.0B/50B)
+Inspect: https://vercel.com/jieun/260424-vibe/8gdx4agJXjTH5cCz7tr9xNpNh2jg [2s]
+Production: https://260424-vibe-gqnkm834d-jieun.vercel.app [2s]
+https://260424-vibe-gqnkm834d-jieun.vercel.appBuilding...
+Building...
+Building: Running build in Washington, D.C., USA (East) – iad1
+Building: Build machine configuration: 2 cores, 8 GB
+Building: Retrieving list of deployment files...
+Building: Previous build caches not available.
+Building: Downloading 26 deployment files...
+Building: Running "vercel build"
+Building: Vercel CLI 51.6.1
+Building: Installing dependencies...
+Building: added 372 packages in 14s
+Building: 146 packages are looking for funding
+Building: run `npm fund` for details
+Building: Detected Next.js version: 16.2.4
+Building: Running "npm run build"
+Building: > 260424-vibe@0.1.0 build
+Building: > next build
+Building: Applying modifyConfig from Vercel
+Building: Attention: Next.js now collects completely anonymous telemetry regarding usage.
+Building: This information is used to shape Next.js' roadmap and prioritize features.
+Building: You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+Building: https://nextjs.org/telemetry
+Building: ▲ Next.js 16.2.4 (Turbopack)
+Building: Creating an optimized production build ...
+Building: ✓ Compiled successfully in 6.3s
+Building: Running TypeScript ...
+Building: Failed to type check.
+Building: ./src/app/api/extract-color/route.ts:39:26
+Building: Type error: Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'Color'.
+Building: Property '0' does not exist on type 'Color'.
+Building: 37 |     }
+Building: 38 |
+Building: > 39 |     const hex = rgbToHex(color[0], color[1], color[2]);
+Building: |                          ^
+Building: 40 |
+Building: 41 |     return NextResponse.json({ hex, rgb: color });
+Building: 42 |   } catch (error) {
+Building: Next.js build worker exited with code: 1 and signal: null
+Building: Error: Command "npm run build" exited with 1
+Error: Command "npm run build" exited with 1
