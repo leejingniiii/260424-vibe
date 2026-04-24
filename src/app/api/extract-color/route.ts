@@ -12,7 +12,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "이미지 URL이 없습니다" }, { status: 400 });
     }
 
-    const response = await fetch(imageUrl);
+    const response = await fetch(imageUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8"
+      }
+    });
     if (!response.ok) {
       return NextResponse.json({ error: "원격 이미지 가져오기 실패" }, { status: 400 });
     }
