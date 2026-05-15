@@ -37,7 +37,13 @@ export default function Home() {
 
   const handleProductSelect = (imageUrl: string) => {
     if (!imageUrl) return;
-    router.push(`/color?img=${encodeURIComponent(imageUrl)}`);
+    try {
+      sessionStorage.setItem("selectedProductImage", imageUrl);
+      router.push("/color");
+    } catch (e) {
+      // Fallback if sessionStorage fails (e.g. private browsing)
+      router.push(`/color?img=${encodeURIComponent(imageUrl)}`);
+    }
   };
 
   return (

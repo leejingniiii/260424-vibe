@@ -7,9 +7,9 @@ import chroma from "chroma-js";
 
 function ColorExtractionContent() {
   const searchParams = useSearchParams();
-  const imageUrl = searchParams.get("img");
   const router = useRouter();
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [dominantHex, setDominantHex] = useState<string>("");
@@ -17,17 +17,26 @@ function ColorExtractionContent() {
   const [selectedHex, setSelectedHex] = useState<string>("");
 
   useEffect(() => {
-    if (!imageUrl) {
+    let finalImageUrl = null;
+    try {
+      finalImageUrl = sessionStorage.getItem("selectedProductImage") || searchParams.get("img");
+    } catch (e) {
+      finalImageUrl = searchParams.get("img");
+    }
+
+    if (!finalImageUrl) {
       router.push("/");
       return;
     }
+    
+    setImageUrl(finalImageUrl);
 
     const extractColor = async () => {
       try {
         const res = await fetch("/api/extract-color", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ imageUrl }),
+          body: JSON.stringify({ imageUrl: finalImageUrl }),
         });
         const data = await res.json();
 
@@ -59,7 +68,7 @@ function ColorExtractionContent() {
     };
 
     extractColor();
-  }, [imageUrl, router]);
+  }, [searchParams, router]);
 
   if (loading) {
     return (
