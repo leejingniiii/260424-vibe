@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ hex, rgb: color });
   } catch (error) {
     console.error("Extract Color Error:", error);
-    return NextResponse.json({ error: "Extraction processing failed" }, { status: 500 });
+    return NextResponse.json({ error: `Extraction processing failed: ${error instanceof Error ? error.message : String(error)}` }, { status: 500 });
   }
 }
 
