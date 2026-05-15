@@ -1,8 +1,4 @@
 import { NextResponse } from "next/server";
-import { getColor } from "colorthief";
-import fs from "fs";
-import path from "path";
-import os from "os";
 import sharp from "sharp";
 
 export async function POST(request: Request) {
@@ -37,22 +33,14 @@ export async function POST(request: Request) {
       buffer = await sharp(Buffer.from(arrayBuffer)).jpeg().toBuffer();
     }
 
-    // Create a temporary file
-    const tempDir = os.tmpdir();
-    const tempFilePath = path.join(tempDir, `img-${Date.now()}-${Math.floor(Math.random() * 1000)}.jpg`);
-    fs.writeFileSync(tempFilePath, buffer);
-
-    // Extract dominant color. 
-    // color is returning [r, g, b] array.
-    const color = (await getColor(tempFilePath)) as any;
-
-    // Cleanup
-    fs.unlinkSync(tempFilePath);
-
-    if (!color) {
-      return NextResponse.json({ error: "Could not extract color" }, { status: 500 });
+    // Extract dominant color directly using sharp
+    const { dominant } = await sharp(buffer).stats();
+    
+    if (!dominant || dominant.r === undefined) {
+      return NextResponse.json({ error: "Could not extract dominant color" }, { status: 500 });
     }
 
+    const color = [dominant.r, dominant.g, dominant.b];
     const hex = rgbToHex(color[0], color[1], color[2]);
 
     return NextResponse.json({ hex, rgb: color });
